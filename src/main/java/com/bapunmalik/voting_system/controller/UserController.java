@@ -52,7 +52,7 @@ public class UserController {
     @GetMapping("/signup")
     public String showSignUpForm(Model model) {
         model.addAttribute("user", new User());
-        return "signup";
+        return "voter-registration";
     }
 
     @PostMapping("/generate-otp")
@@ -184,7 +184,7 @@ public class UserController {
             Model model) {
         if (user.getAadhar() == null || !user.getAadhar().toString().matches("\\d{12}")) {
             model.addAttribute("error", "Invalid Aadhaar number.");
-            return "signup";
+            return "voter-registration";
         }
 
         try {

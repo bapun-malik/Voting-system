@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class FormController {
     @GetMapping("/sign")
     public String signup(){
-        return "signup";
+        return "voter-registration";
     }
 }

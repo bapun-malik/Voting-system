@@ -68,26 +68,29 @@ public class PdfGeneratorService {
         // Load the user's photo
         Path filePath = Paths.get("poster/" + user.getPhotoFileName());
         Image photo = Image.getInstance(filePath.toString());
-        photo.scaleToFit(60, 20);
+        photo.setWidthPercentage(30);
     
         // Load the user's signature
         Path signaturePath = Paths.get("poster/" + user.getSignatureFileName());
         Image signature = Image.getInstance(signaturePath.toString());
-        signature.scaleToFit(70, 20);
+        signature.setWidthPercentage(20);
+        
     
         // Create a cell for the photo and signature
         PdfPCell imageCell = new PdfPCell();
-        imageCell.setBorder(Rectangle.NO_BORDER);
+        // imageCell.setBorder(Rectangle.NO_BORDER);
     
         // Add the photo and signature to a vertical layout
         PdfPTable imageTable = new PdfPTable(1);
         imageTable.setWidthPercentage(100);
         imageTable.addCell(new PdfPCell(photo, true) {{
-            setBorder(Rectangle.NO_BORDER);
+            imageTable.setPaddingTop(10);
+            // setBorder(Rectangle.NO_BORDER);
             setHorizontalAlignment(Element.ALIGN_CENTER);
         }});
         imageTable.addCell(new PdfPCell(signature, true) {{
-            setBorder(Rectangle.NO_BORDER);
+            imageTable.setPaddingTop(10);
+            // setBorder(Rectangle.NO_BORDER);
             setHorizontalAlignment(Element.ALIGN_CENTER);
         }});
     

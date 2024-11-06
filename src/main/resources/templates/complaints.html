@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Resolve Complaints</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <h1>Resolve Complaints</h1>
+    <a href="/admin/dashboard" class="btn">Back to Dashboard</a>
+
+    <h2>Pending Complaints</h2>
+    <table>
+        <tr>
+            <th>Complaint ID</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="complaint : ${pendingComplaints}">
+            <td th:text="${complaint.id}"></td>
+            <td th:text="${complaint.description}"></td>
+            <td>
+                <a th:href="@{/admin/complaints/resolve/{id}(id=${complaint.id})}">Resolve</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

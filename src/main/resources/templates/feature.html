@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Base Styles */
+
+        /* Header Styles */
+        .features-header {
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(180deg, #fff 0%, #f6f8fd 100%);
+        }
+
+        .features-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #1a1a1a, #4a4a4a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .features-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        /* Feature Card */
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #007AFF;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .feature-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Feature Details */
+        .feature-details {
+            margin-top: 1rem;
+        }
+
+        .feature-details ul {
+            list-style: none;
+        }
+
+        .feature-details li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: #444;
+        }
+
+        .feature-details li::before {
+            content: "✓";
+            color: #007AFF;
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        /* Call to Action Button */
+        .feature-cta {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #007AFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .feature-cta:hover {
+            background: #0066cc;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 122, 255, 0.3);
+        }
+
+        /* Progress Bar Animation */
+        .progress-bar {
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: #007AFF;
+            width: 0;
+            transition: width 1s ease;
+        }
+
+        /* Stats Animation */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+
+    <title>Voting Features</title>
+</head>
+<body>
+    <div th:replace="fragments/header::header"></div>
+    <header class="features-header">
+        <h1>Discover Our Features</h1>
+        <p>Empowering democracy through secure and accessible voting solutions</p>
+    </header>
+
+    <div class="features-container">
+        <div class="features-grid">
+            <!-- Cast Your Vote Feature -->
+            <div class="feature-card" data-aos="fade-up">
+                <div class="feature-icon">🗳️</div>
+                <h3>Cast Your Vote</h3>
+                <p>Simple and secure voting process that ensures your voice is heard.</p>
+                <div class="feature-details">
+                    <ul>
+                        <li>Secure authentication</li>
+                        <li>Easy-to-use interface</li>
+                        <li>Multiple vote verification</li>
+                        <li>Privacy protection</li>
+                    </ul>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" id="vote-progress"></div>
+                </div>
+                <div class="stats">
+                    <span>Success Rate</span>
+                    <span class="counter" data-target="99.9">0%</span>
+                </div>
+                <a href="#" class="feature-cta">Vote Now</a>
+            </div>
+
+            <!-- Dashboard Feature -->
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-icon">📊</div>
+                <h3>Your Dashboard</h3>
+                <p>Track your voting history and monitor ongoing elections.</p>
+                <div class="feature-details">
+                    <ul>
+                        <li>Real-time updates</li>
+                        <li>Voting history</li>
+                        <li>Custom notifications</li>
+                        <li>Data visualization</li>
+                    </ul>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" id="dashboard-progress"></div>
+                </div>
+                <div class="stats">
+                    <span>User Satisfaction</span>
+                    <span class="counter" data-target="95">0%</span>
+                </div>
+                <a href="#" class="feature-cta">View Dashboard</a>
+            </div>
+
+            <!-- Results Feature -->
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-icon">🏆</div>
+                <h3>Live Results</h3>
+                <p>Watch election results unfold in real-time with detailed analytics.</p>
+                <div class="feature-details">
+                    <ul>
+                        <li>Live vote counting</li>
+                        <li>Detailed statistics</li>
+                        <li>Historical comparisons</li>
+                        <li>Regional breakdowns</li>
+                    </ul>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" id="results-progress"></div>
+                </div>
+                <div class="stats">
+                    <span>Accuracy Rate</span>
+                    <span class="counter" data-target="100">0%</span>
+                </div>
+                <a href="#" class="feature-cta">See Results</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animate progress bars when in view
+        function animateProgress() {
+            const progressBars = document.querySelectorAll('.progress');
+            const values = [99, 95, 100];
+            
+            progressBars.forEach((bar, index) => {
+                bar.style.width = `${values[index]}%`;
+            });
+        }
+
+        // Animate counters
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const target = parseFloat(counter.getAttribute('data-target'));
+                const increment = target / speed;
+
+                let currentCount = 0;
+                const updateCount = () => {
+                    if (currentCount < target) {
+                        currentCount += increment;
+                        counter.innerText = currentCount.toFixed(1) + '%';
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target + '%';
+                    }
+                };
+
+                updateCount();
+            });
+        }
+
+        // Animate elements when they come into view
+        function handleIntersection(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    if (entry.target.classList.contains('feature-card')) {
+                        animateProgress();
+                        animateCounters();
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }
+
+        // Set up intersection observer
+        const observer = new IntersectionObserver(handleIntersection, {
+            threshold: 0.1
+        });
+
+        // Observe elements
+        document.querySelectorAll('.feature-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

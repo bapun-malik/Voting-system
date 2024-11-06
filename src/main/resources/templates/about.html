@@ -1,0 +1,320 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - E-Voting System</title>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+
+    <style>
+        /* Modern CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Custom Properties */
+        :root {
+            --primary-color: #2a6f9d;
+            --secondary-color: #264653;
+            --accent-color: #e9c46a;
+            --text-color: #2b2d42;
+            --bg-color: #f8f9fa;
+        }
+
+        /* Smooth Scroll Behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            top: -50%;
+            left: -50%;
+            animation: shine 8s infinite linear;
+        }
+
+        .header-content {
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-color);
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .tech-item {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Contact Section */
+        .contact-info {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--primary-color);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shine {
+            to {
+                transform: rotate(45deg) translate(50%, 50%);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header p {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        </style>
+
+</head>
+<body>
+
+    <div th:replace="fragments/header::header"></div>
+
+    <header class="header">
+        <div class="header-content">
+            <h1>E-Voting System</h1>
+            <p>A Minor Project by Bapun Malik</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section" id="about">
+            <h2 class="section-title">About the Project</h2>
+            <p>This E-Voting System is designed to revolutionize the traditional voting process by making it more accessible, secure, and efficient. Built with modern technologies and a focus on user experience, this platform enables seamless digital voting while maintaining the highest standards of security and transparency.</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🔒</div>
+                    <h3>Secure Voting</h3>
+                    <p>Advanced encryption and authentication mechanisms ensure the integrity of every vote.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Real-time Results</h3>
+                    <p>Instant vote counting and result generation with comprehensive analytics.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <h3>User-Friendly</h3>
+                    <p>Intuitive interface designed for voters of all technical backgrounds.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="technology">
+            <h2 class="section-title">Technologies Used</h2>
+            <p>Built using cutting-edge technologies to ensure performance, security, and scalability.</p>
+            
+            <div class="tech-stack">
+                <div class="tech-item">HTML5</div>
+                <div class="tech-item">CSS3</div>
+                <div class="tech-item">JavaScript</div>
+                <div class="tech-item">Node.js</div>
+                <div class="tech-item">MongoDB</div>
+                <div class="tech-item">Express.js</div>
+            </div>
+        </section>
+
+        <section class="section" id="contact">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="contact-info">
+                <h3>Bapun Malik</h3>
+                <p>Computer Science Department</p>
+                <div class="social-links">
+                    <a href="https://github.com/yourusername" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="mailto:your.email@example.com" class="social-link">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script>
+        // Intersection Observer for scroll animations
+        const sections = document.querySelectorAll('.section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

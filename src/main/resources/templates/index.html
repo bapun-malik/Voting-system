@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Landing</title>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+</head>
+<body>
+    <div th:replace="fragments/header::header"></div>
+    <section class="hero" id="home">
+        <div class="floating-shapes" id="shapes"></div>
+        <div class="hero-content">
+            <h1>Create Something Beautiful Today</h1>
+            <p>Transform your ideas into reality with our powerful and intuitive platform. Start your journey towards innovation and creativity.</p>
+            <a href="#" class="cta-button">Get Started</a>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3>Beautiful Design</h3>
+                <p>Create stunning visuals with our intuitive design tools.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Fast Performance</h3>
+                <p>Lightning-fast performance that keeps up with your creativity.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Easy to Use</h3>
+                <p>Simple and intuitive interface for the best user experience.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛠️</div>
+                <h3>Powerful Tools</h3>
+                <p>Advanced features to bring your vision to life.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Create floating shapes
+        function createShapes() {
+            const shapes = document.getElementById('shapes');
+            const numShapes = 5;
+
+            for (let i = 0; i < numShapes; i++) {
+                const shape = document.createElement('div');
+                shape.className = 'shape';
+                shape.style.width = Math.random() * 200 + 100 + 'px';
+                shape.style.height = shape.style.width;
+                shape.style.left = Math.random() * 100 + '%';
+                shape.style.top = Math.random() * 100 + '%';
+                shape.style.animationDelay = Math.random() * 20 + 's';
+                shapes.appendChild(shape);
+            }
+        }
+
+        // Animate features on scroll
+        function animateOnScroll() {
+            const features = document.querySelectorAll('.feature-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            features.forEach(feature => {
+                observer.observe(feature);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createShapes();
+            animateOnScroll();
+        });
+      // Modal functionality
+      function openModal(modalId) {
+          document.getElementById(modalId).classList.add('active');
+          document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal(modalId) {
+          document.getElementById(modalId).classList.remove('active');
+          document.body.style.overflow = 'auto';
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+          if (event.target.classList.contains('modal')) {
+              event.target.classList.remove('active');
+              document.body.style.overflow = 'auto';
+          }
+      }
+
+      // Handle form submissions
+      function handleLogin(event) {
+          event.preventDefault();
+          const email = document.getElementById('login-email').value;
+          const password = document.getElementById('login-password').value;
+          
+          // Add your login logic here
+          console.log('Login:', { email, password });
+          
+          // Close modal after submission
+          closeModal('login-modal');
+      }
+
+      function handleSignup(event) {
+          event.preventDefault();
+          const name = document.getElementById('signup-name').value;
+          const email = document.getElementById('signup-email').value;
+          const password = document.getElementById('signup-password').value;
+          
+          // Add your signup logic here
+          console.log('Signup:', { name, email, password });
+          
+          // Close modal after submission
+          closeModal('signup-modal');
+      }
+
+      // Rest of your existing JavaScript...
+  </script>
+</body>
+</html>

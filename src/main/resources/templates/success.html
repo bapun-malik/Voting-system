@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Success</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function redirectToHome() {
+            setTimeout(function() {
+                window.location.href = '/users/signup'; // Redirect to home page after 10 seconds
+            }, 10000); // 10,000 milliseconds = 10 seconds
+        }
+    </script>
+</head>
+<body onload="redirectToHome()">
+<div class="container">
+    <div class="card">
+        <h1 class="text-success"><i class="fas fa-check-circle"></i> Registration Successful!</h1>
+        <p class="lead">Congratulations! Your registration is complete.</p>
+        <p>Your Voter ID is: <strong th:text="${voterId}"></strong></p>
+        <a th:href="@{/pdf/generate(id=${voterId})}" class="btn btn-primary">
+            <i class="fas fa-download"></i> Download Your Voter Card
+        </a>
+    </div>
+    <p>You will be redirected to the home page shortly...</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+</body>
+</html>
+
+<!-- 
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Success</title>
+</head>
+<body>
+    <h1>Registration Successful</h1>
+    <p>Your account has been successfully verified.</p>
+    <a th:href="@{/login}">Login</a>
+</body>
+</html> -->

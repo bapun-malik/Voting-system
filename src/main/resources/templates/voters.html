@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Voter Approval</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <h1>Voter Approval</h1>
+    <a href="/admin/dashboard" class="btn">Back to Dashboard</a>
+
+    <h2>Pending Voter Approvals</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="voter : ${pendingVoters}">
+            <td th:text="${voter.name}"></td>
+            <td th:text="${voter.email}"></td>
+            <td>
+                <a th:href="@{/admin/voters/approve/{id}(id=${voter.id})}">Approve</a> | 
+                <a th:href="@{/admin/voters/reject/{id}(id=${voter.id})}">Reject</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

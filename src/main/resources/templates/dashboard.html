@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <div class="dashboard-section">
+        <h2>Overview</h2>
+        <p>Total Number of Voters: <span th:text="${totalVoters}"></span></p>
+        <p>Total Number of Candidates: <span th:text="${totalCandidates}"></span></p>
+        <p>Pending Voter Approvals: <span th:text="${pendingVoters}"></span></p>
+        <p>Pending Complaints: <span th:text="${pendingComplaints}"></span></p>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>Manage Candidates</h2>
+        <a href="/admin/candidates" class="btn">View/Edit Candidates</a>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>Voter Approval</h2>
+        <a href="/admin/voters" class="btn">Approve/Reject Voters</a>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>Complaint Resolution</h2>
+        <a href="/admin/complaints" class="btn">Resolve Complaints</a>
+    </div>
+</body>
+</html>

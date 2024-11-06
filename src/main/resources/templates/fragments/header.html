@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Application</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+    <div th:fragment="header">
+    <nav>
+        <a th:href="@{/}" style="text-decoration: none;">
+            <div class="logo">
+                <span>InstaVote</span>
+                <img th:src="@{/images/index-finger.png}" alt="Logo">
+            </div>
+        </a>
+        <div class="nav-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/feature}">Features</a>
+            <a th:href="@{/about}">About</a>
+            <a th:href="@{/contact}">Contact</a>
+            <div class="auth-buttons">
+                <button class="login-btn" onclick="openModal('login-modal')">Login</button>
+                <button class="signup-btn" onclick="openModal('signup-modal')">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="close-modal" onclick="closeModal('login-modal')">&times;</button>
+            </div>
+            <form class="auth-form" th:action="@{/login}" method="post" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Signup Modal -->
+    <div class="modal" id="signup-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign Up</h2>
+                <button class="close-modal" onclick="closeModal('signup-modal')">&times;</button>
+            </div>
+            <form class="auth-form" th:action="@{/signup}" method="post" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="password" required>
+                </div>
+                <button type="submit" class="submit-btn">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

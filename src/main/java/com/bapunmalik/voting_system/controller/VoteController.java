@@ -14,7 +14,6 @@ import com.bapunmalik.voting_system.models.User;
 import com.bapunmalik.voting_system.models.dto.CandidateWithVoteCount;
 import com.bapunmalik.voting_system.repository.UserRepository;
 import com.bapunmalik.voting_system.service.CandidateService;
-import com.bapunmalik.voting_system.service.UserService;
 import com.bapunmalik.voting_system.service.VoteService;
 import com.bapunmalik.voting_system.service.VotingService;
 

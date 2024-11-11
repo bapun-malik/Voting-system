@@ -14,16 +14,12 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.EnumMap;
@@ -32,9 +28,6 @@ import java.util.Map;
 @Service
 public class PdfGeneratorService {
 
-     @Value("${project.poster}")
-    private String path;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -42,7 +35,11 @@ public class PdfGeneratorService {
     public byte[] generatePdf(String voterId) throws IOException, DocumentException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     
-        User user = userRepository.findByVoterId(voterId);
+        User user = userRepository.findByVoterId(voterId);  // Retrieve user data from the database
+    
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with voter ID: " + voterId);
+        }
     
         // Create a new Document
         Document document = new Document(PageSize.A4);
@@ -65,32 +62,28 @@ public class PdfGeneratorService {
         cardTable.setWidthPercentage(100);
         cardTable.setWidths(new int[]{3, 3}); // Adjust the column widths
     
-        // Load the user's photo
-        Path filePath = Paths.get("poster/" + user.getPhotoFileName());
-        Image photo = Image.getInstance(filePath.toString());
+        // Retrieve photo URL from Cloudinary (stored in the User entity)
+        String photoUrl = user.getPhotoFileName();  // Assuming the URL is stored in the User object
+        Image photo = Image.getInstance(photoUrl);
         photo.setWidthPercentage(30);
     
-        // Load the user's signature
-        Path signaturePath = Paths.get("poster/" + user.getSignatureFileName());
-        Image signature = Image.getInstance(signaturePath.toString());
+        // Retrieve signature URL from Cloudinary (stored in the User entity)
+        String signatureUrl = user.getSignatureFileName();  // Assuming the URL is stored in the User object
+        Image signature = Image.getInstance(signatureUrl);
         signature.setWidthPercentage(20);
-        
     
         // Create a cell for the photo and signature
         PdfPCell imageCell = new PdfPCell();
-        // imageCell.setBorder(Rectangle.NO_BORDER);
     
         // Add the photo and signature to a vertical layout
         PdfPTable imageTable = new PdfPTable(1);
         imageTable.setWidthPercentage(100);
         imageTable.addCell(new PdfPCell(photo, true) {{
             imageTable.setPaddingTop(10);
-            // setBorder(Rectangle.NO_BORDER);
             setHorizontalAlignment(Element.ALIGN_CENTER);
         }});
         imageTable.addCell(new PdfPCell(signature, true) {{
             imageTable.setPaddingTop(10);
-            // setBorder(Rectangle.NO_BORDER);
             setHorizontalAlignment(Element.ALIGN_CENTER);
         }});
     

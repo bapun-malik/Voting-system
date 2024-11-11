@@ -1,5 +1,7 @@
 package com.bapunmalik.voting_system.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,8 @@ import com.bapunmalik.voting_system.repository.CandidateRepository;
 import com.bapunmalik.voting_system.service.CandidateService;
 import com.bapunmalik.voting_system.service.UserService;
 import com.bapunmalik.voting_system.service.VotingService;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 
 
 @Controller
@@ -50,8 +53,8 @@ public class AdminController {
     @Autowired
     private VotingService votingService;
 
-    @Value("${project.poster}")
-    private String path;
+    @Autowired
+    private Cloudinary cloudinary;
 
     @GetMapping("/dashboard")
     public String showAdmindashboard(){
@@ -66,28 +69,27 @@ public class AdminController {
         return "candidates";
     }
   
-
     @PostMapping("/candidate-registration")
-    public String storecandidate(@ModelAttribute Candidate candidate,
-        @RequestParam("photo") MultipartFile photo,Model model){
-        try{
-            Path uploadPath = Paths.get(path);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            String photoFileName = saveFile(photo, candidate.getParty()+candidate.getConstituency() + "_photo");
-            candidate.setPhotoFilename(photoFileName);
-            candidateRepo.save(candidate);
-            return "redirect:/admin/dashboard"; 
+    public String storeCandidate(@ModelAttribute Candidate candidate,
+            @RequestParam("photo") MultipartFile photo, Model model) {
+        try {
+            // Upload photo to Cloudinary
+            String photoFileName = uploadToCloudinary(photo, candidate.getParty() + candidate.getConstituency() + "_photo");
 
-        }catch(IOException e){
+            // Set the Cloudinary URL or public ID as the filename
+            candidate.setPhotoFilename(photoFileName);
+
+            // Save candidate data
+            candidateRepo.save(candidate);
+
+            return "redirect:/admin/dashboard"; // Redirect to the admin dashboard
+
+        } catch (IOException e) {
             e.printStackTrace();
             model.addAttribute("error", "Failed to upload files.");
-            return "/dashboard";
+            return "/dashboard"; // Return to the dashboard with an error message
         }
     }
-
-
 
     @GetMapping("/voter-verification")
     public String showVerificationPage(
@@ -197,30 +199,25 @@ public class AdminController {
 
 
 
+        // Method to upload file to Cloudinary
+    private String uploadToCloudinary(MultipartFile file, String publicId) throws IOException {
+        // Upload the file to Cloudinary
+        File tempFile = convertMultipartFileToFile(file); // Convert MultipartFile to File
+        @SuppressWarnings("unchecked")
+        Map<String, String> uploadResult = cloudinary.uploader().upload(tempFile, 
+                                            ObjectUtils.asMap("public_id", publicId));
 
-
-
-
-
-
-
-
-
-    private String saveFile(MultipartFile file, String newFileName) throws IOException {
-        if (file.isEmpty()) {
-            throw new IOException("File is empty.");
-        }
-
-        // Save the file to the server
-        String extension = getFileExtension(file.getOriginalFilename());
-        Path filePath = Paths.get(path + newFileName + extension);
-        Files.write(filePath, file.getBytes());
-        return newFileName + extension;
+        // Return the Cloudinary URL or public ID
+        return uploadResult.get("secure_url");  // Or use public_id based on your requirement
     }
 
-    private String getFileExtension(String filename) {
-        int dotIndex = filename.lastIndexOf('.');
-        return dotIndex == -1 ? "" : filename.substring(dotIndex); // Return the file extension
+    // Method to convert MultipartFile to File
+    private File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
+        File file = new File(multipartFile.getOriginalFilename());
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(multipartFile.getBytes());
+        }
+        return file;
     }
 
 }

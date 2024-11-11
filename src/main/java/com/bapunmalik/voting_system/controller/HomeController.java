@@ -13,13 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.bapunmalik.voting_system.models.Notification;
 import com.bapunmalik.voting_system.models.User;
-import com.bapunmalik.voting_system.models.VotingStatus;
 import com.bapunmalik.voting_system.models.dto.CandidateWithVoteCount;
 import com.bapunmalik.voting_system.repository.UserRepository;
 import com.bapunmalik.voting_system.service.CandidateService;
 import com.bapunmalik.voting_system.service.NotificationService;
 import com.bapunmalik.voting_system.service.UserService;
-import com.bapunmalik.voting_system.service.VoteService;
 import com.bapunmalik.voting_system.service.VotingService;
 
 @Controller

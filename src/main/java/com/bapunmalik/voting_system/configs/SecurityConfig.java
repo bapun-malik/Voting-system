@@ -46,12 +46,10 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
-                    .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
-                    .requestMatchers("/about", "/contact", "/feature").permitAll()
+                    .requestMatchers("/", "/css/**", "/js/**", "/images/**","/users/signup", "/login", "/users/register","/users/register","/pdf/generate","/about", "/contact", "/feature").permitAll()
                     .requestMatchers("/admin/**", "/api/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.POST, "/vote/**").hasRole("USER")
                     .requestMatchers("/dashboard", "/vote").hasRole("USER")
-                    .requestMatchers("/users/signup", "/login", "/users/register","/users/register","/pdf/generate").permitAll()
                     .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

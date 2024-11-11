@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 @Controller
@@ -90,16 +91,36 @@ public class UserController {
             throw new IOException("File is empty.");
         }
 
-        try {
-            // Upload to Cloudinary
-            @SuppressWarnings("unchecked")
-            Map<String, String> uploadResult = cloudinary.uploader().upload(file.getBytes(),
-                    ObjectUtils.asMap("public_id", newFileName, "resource_type", "auto"));
-            
-            // Get the URL of the uploaded file
-            return uploadResult.get("url");  // This is the Cloudinary URL
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to upload file to Cloudinary", e);
+        if (!isValidFile(file)) {
+            throw new IllegalArgumentException("Invalid file type or size.");
         }
+
+        // Stream the file directly to Cloudinary
+        try (InputStream fileInputStream = file.getInputStream()) {
+            @SuppressWarnings("unchecked")
+            Map<String, String> uploadResult = cloudinary.uploader().upload(fileInputStream,
+                    ObjectUtils.asMap(
+                            "public_id", newFileName, // Set custom public ID
+                            "resource_type", "auto",   // Automatically detect file type (image/video/raw)
+                            "quality", "auto",         // Auto optimize quality
+                            "fetch_format", "auto")); // Auto convert to the best format
+
+            return uploadResult.get("url"); // Return the Cloudinary URL
+        } catch (IOException e) {
+            // Log the exception or rethrow it based on your logging strategy
+            throw new IOException("File upload failed: " + e.getMessage(), e);
+        }
+    }
+
+    private boolean isValidFile(MultipartFile file) {
+        // File size validation (example: max 10MB)
+        long maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.getSize() > maxSize) {
+            return false;
+        }
+
+        // Mime-type validation (example: only allow images)
+        String mimeType = file.getContentType();
+        return mimeType != null && mimeType.startsWith("image");
     }
 }

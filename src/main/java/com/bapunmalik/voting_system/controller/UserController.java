@@ -96,19 +96,18 @@ public class UserController {
             throw new IllegalArgumentException("Invalid file type or size.");
         }
     
-        // Stream the file directly to Cloudinary
         try (InputStream fileInputStream = file.getInputStream()) {
+            byte[] fileBytes = fileInputStream.readAllBytes();
             @SuppressWarnings("unchecked")
-            Map<String, String> uploadResult = cloudinary.uploader().upload(fileInputStream,
+            Map<String, String> uploadResult = cloudinary.uploader().upload(fileBytes,
                     ObjectUtils.asMap(
-                            "public_id", newFileName,  // Set custom public ID
-                            "resource_type", "image",  // Explicitly set as image
-                            "quality", "auto",         // Auto optimize quality
-                            "fetch_format", "auto"));  // Auto convert to the best format
-    
-            return uploadResult.get("url"); // Return the Cloudinary URL
+                            "public_id", newFileName,
+                            "resource_type", "auto",
+                            "quality", "auto",
+                            "fetch_format", "auto"));
+            System.out.println("File Input Stream Available Bytes: " + fileInputStream.available());
+            return uploadResult.get("url");
         } catch (IOException e) {
-            // Log the exception or rethrow it based on your logging strategy
             throw new IOException("File upload failed: " + e.getMessage(), e);
         }
     }

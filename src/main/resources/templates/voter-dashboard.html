@@ -55,7 +55,7 @@
                             <h3 th:text="${candidate.party}"></h3>
                             <h1 th:text="${candidate.name}">$25,023</h1>
                         </div>
-                        <img th:src="@{/{photo}(photo=${candidate.photoFilename})}" alt="Candidate image" style="width: 5rem;">                              
+                        <img th:src="${candidate.photoFilename}" alt="Candidate image" style="width: 5rem;">                              
                     </div>
                     <h2 th:if="${!status}" th:text="${candidate.winner ? 'Winner' : ''}" style="text-align: center; color: rgb(27, 48, 238);"></h2>
                 </div>
@@ -106,7 +106,7 @@
                     </div>
 
                     <div class="profile-photo">
-                        <img th:src="@{/{photo}(photo=${user.photoFileName})}" alt="image">
+                        <img th:src="${user.photoFileName}" alt="image">
                     </div>
                 </div>
             </div>

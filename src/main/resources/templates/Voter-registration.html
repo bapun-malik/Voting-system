@@ -117,6 +117,15 @@
             content: " *";
             color: #e53e3e;
         }
+
+/* Responsive Styles for smaller screens */
+        @media (max-width: 768px) {
+            .form-row {
+                display: flex;
+                flex-direction: column;
+                gap: 15px; /* Adjust the gap as needed */
+            }
+        }
     </style>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -125,7 +134,7 @@
     
     <div class="container">
         <h1>Voter Registration Form</h1>
-        <form id="voterForm" onsubmit="return validateForm(event)"  th:action="@{/users/register}" method="post" enctype="multipart/form-data" th:object="${user}">
+        <form id="voterForm"   th:action="@{/users/register}" method="post" enctype="multipart/form-data" th:object="${user}">
             <!-- Personal Information Section -->
             <div class="section">
                 <h2 class="section-title">Personal Information</h2>
@@ -206,8 +215,7 @@
                         <input type="text" id="policeStation"  th:field="*{policeStation}" required>
                     </div>
                 </div>
-                <div class="form-row">
-                    
+                <div class="form-row">                   
                     <div class="form-group">
                         <label class="required" for="state">State</label>
                         <select id="state" name="state" class="form-control" onchange="updateDistricts()" th:field="*{state}" required>
@@ -286,21 +294,21 @@
                 <h2 class="section-title">Document Upload</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="required">Photo Upload</label>
+                        <label class="required" for="photo" >Photo Upload</label>
                         <div class="upload-section">
                             <div class="upload-preview">
                                 <img id="photoPreview" alt="Photo preview">
                             </div>
-                            <input type="file" id="photo" accept="image/*" required>
+                            <input type="file" id="photo" name="photo" accept="image/*" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="required">Signature Upload</label>
+                        <label class="required" for="signature" >Signature Upload</label>
                         <div class="upload-section">
                             <div class="upload-preview">
                                 <img id="signaturePreview" alt="Signature preview">
                             </div>
-                            <input type="file" id="signature" accept="image/*" required>
+                            <input type="file" name="signature" id="signature" accept="image/*" required>
                         </div>
                     </div>
                 </div>
@@ -1195,5 +1203,104 @@
             }
         }
     </script>
+      <script>
+        // Create floating shapes
+        function createShapes() {
+            const shapes = document.getElementById('shapes');
+            const numShapes = 5;
+
+            for (let i = 0; i < numShapes; i++) {
+                const shape = document.createElement('div');
+                shape.className = 'shape';
+                shape.style.width = Math.random() * 200 + 100 + 'px';
+                shape.style.height = shape.style.width;
+                shape.style.left = Math.random() * 100 + '%';
+                shape.style.top = Math.random() * 100 + '%';
+                shape.style.animationDelay = Math.random() * 20 + 's';
+                shapes.appendChild(shape);
+            }
+        }
+
+        // Animate features on scroll
+        function animateOnScroll() {
+            const features = document.querySelectorAll('.feature-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            features.forEach(feature => {
+                observer.observe(feature);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createShapes();
+            animateOnScroll();
+        });
+      // Modal functionality
+      function openModal(modalId) {
+          document.getElementById(modalId).classList.add('active');
+          document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal(modalId) {
+          document.getElementById(modalId).classList.remove('active');
+          document.body.style.overflow = 'auto';
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+          if (event.target.classList.contains('modal')) {
+              event.target.classList.remove('active');
+              document.body.style.overflow = 'auto';
+          }
+      }
+
+      // Handle form submissions
+      function handleLogin(event) {
+          event.preventDefault();
+          const email = document.getElementById('login-email').value;
+          const password = document.getElementById('login-password').value;
+          
+          // Add your login logic here
+          console.log('Login:', { email, password });
+          
+          // Close modal after submission
+          closeModal('login-modal');
+      }
+
+      function handleSignup(event) {
+          event.preventDefault();
+          const name = document.getElementById('signup-name').value;
+          const email = document.getElementById('signup-email').value;
+          const password = document.getElementById('signup-password').value;
+          
+          // Add your signup logic here
+          console.log('Signup:', { name, email, password });
+          
+          // Close modal after submission
+          closeModal('signup-modal');
+      }
+
+      // Rest of your existing JavaScript...
+  </script>
+  <script>
+    window.onload = function () {
+        var dob = document.getElementById("dob");
+        var today = new Date();
+        var year = today.getFullYear() - 18;
+        var month = ("0" + (today.getMonth() + 1)).slice(-2);
+        var day = ("0" + today.getDate()).slice(-2);
+
+        var maxDate = year + "-" + month + "-" + day;
+        dob.setAttribute("max", maxDate);
+    };
+</script>
 </body>
 </html>

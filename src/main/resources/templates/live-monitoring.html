@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* styles.css */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f4f6f9;
+    }
+
+    .dashboard {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #1f2937;
+      color: #ffffff;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar nav ul {
+      list-style: none;
+    }
+
+    .sidebar nav ul li {
+      margin: 15px 0;
+    }
+
+    .sidebar nav ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    section h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    form input,
+    textarea,
+    button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .form-container {
+      background-color: white;
+      padding: 3rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+    }
+
+    #candidate-form {
+      width: 50%;
+      position: relative;
+      left: 25%;
+    }
+
+    .form-group {
+      margin-bottom: 2rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    input,
+    input[type="file"] {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    input[type="file"] {
+      padding: 0.5rem;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    button {
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Modal styling */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .close-button:hover {
+      color: #000;
+    }
+
+    /* Custom Properties */
+    :root {
+      --primary-color: #2a6f9d;
+      --secondary-color: #264653;
+      --accent-color: #e9c46a;
+      --text-color: #2b2d42;
+      --bg-color: #f8f9fa;
+    }
+
+    /* Smooth Scroll Behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    /* Header Styles */
+    .header {
+      height: 100vh;
+      /* display: flex;
+            align-items: center;
+            justify-content: center; */
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+
+    .header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .header p {
+      font-size: 1.5rem;
+      opacity: 0.9;
+    }
+
+    /* Main Content Styles */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .section {
+      margin-bottom: 6rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      color: var(--secondary-color);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      width: 60px;
+      height: 4px;
+      background-color: var(--accent-color);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shine {
+      to {
+        transform: rotate(45deg) translate(50%, 50%);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.5rem;
+      }
+
+      .header p {
+        font-size: 1.2rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    main .recent-order table {
+      background-color: var(--clr-white);
+      width: 100%;
+      border-radius: var(--card-border-radius);
+      padding: var(--card-padding);
+      text-align: center;
+      box-shadow: var(--box-shadow);
+      transition: all .3s ease;
+      color: var(--clr-dark);
+    }
+
+    main .recent-order table:hover {
+      box-shadow: none;
+    }
+
+    main .recent-order a {
+      text-align: center;
+      display: block;
+      margin: 1rem;
+    }
+
+    main table tbody tr {
+      height: 3.8rem;
+      border-bottom: 1px solid var(--clr-white);
+      color: var(--clr-dark-variant);
+    }
+
+    main table tbody tr:last-child td {
+      border: none;
+    }
+
+    main table tbody td {
+      height: 3.8rem;
+      border-bottom: 1px solid var(--clr-dark);
+    }
+    .filter-section {
+    max-width: 300px;
+    padding: 20px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.filter-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.filter-section select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #1f2937;
+    cursor: pointer;
+    margin-bottom: 16px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='14' height='8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.filter-section select:hover {
+    border-color: #9ca3af;
+}
+
+.filter-section select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.filter-section button {
+    width: 100%;
+    padding: 10px 16px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-section button:hover {
+    background-color: #2563eb;
+}
+
+.filter-section button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+.filter-section button:active {
+    transform: scale(0.98);
+}
+
+/* Optional: Add dark mode support */
+@media (prefers-color-scheme: dark) {
+    .filter-section {
+        background: #1f2937;
+    }
+
+    .filter-section label {
+        color: #e5e7eb;
+    }
+
+    .filter-section select {
+        background-color: #374151;
+        border-color: #4b5563;
+        color: #e5e7eb;
+    }
+
+    .filter-section select:hover {
+        border-color: #6b7280;
+    }
+
+    .filter-section select:focus {
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+    }
+}
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div class="dashboard">
+    <aside class="sidebar">
+      <h2><a th:href="@{/admin/dashboard}" style="text-decoration: none;color: white;">Admin Panel</a></h2>
+    <nav>
+      <ul>
+        <li><a th:href="@{/admin/candidate-registration}">Add Candidate</a></li>
+        <li><a th:href="@{/notifications}">Notifications</a></li>
+        <li><a th:href="@{/admin/publish-result}">Results</a></li>
+        <li><a th:href="@{/admin/live-monitoring}">Live Monitoring</a></li>
+        <li><a th:href="@{/admin/voter-verification}">Voter Verification</a></li>
+        <li><a th:href="@{/logout}">Logout</a></li>
+
+      </ul>
+  </nav>
+  </aside>
+  </div>
+  <header class="header" style="width: 100%;">
+    <div>
+      <h2>Voting Status:
+        <span th:text="${isVotingOpen ? 'Open' : 'Closed'}"></span>
+      </h2>
+
+      <div>
+        <!-- Form to Open Voting -->
+        <form th:if="${!isVotingOpen}" th:action="@{/admin/open-voting}" method="post">
+          <button type="submit" class="btn btn-success">Open Voting</button>
+        </form>
+
+        <!-- Form to Close Voting -->
+        <form th:if="${isVotingOpen}" th:action="@{/admin/close-voting}" method="post">
+          <button type="submit" class="btn btn-danger">Close Voting</button>
+        </form>
+      </div>
+    </div>
+    <main>
+    <div class="recent-order">
+      <h1 th:text="${status ? 'Current Voting' : 'Voting Not Started Yet'}"></h1>
+       <!-- Constituency Filter -->
+       <div class="filter-section" th:if="${status}">
+        <label for="constituency-filter">Filter by Constituency:</label>
+        <select id="constituency-filter" name="constituency">
+          <option value="">All</option>
+          <option th:each="constituency : ${constituencies}" th:value="${constituency}" th:text="${constituency}">Constituency</option>
+        </select>
+        <button type="button" class="btn btn-primary" onclick="filterByConstituency()">Filter</button>
+      </div>
+      <table th:if="${status}">
+        <thead>
+          <tr>
+            <th>Candidate Name</th>
+            <th>Party</th>
+            <th>Constituency</th>
+            <th>Number of Votes</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="candidates-list">
+          <tr class="candidate-item" th:each="candidate : ${candidates}" th:data-constituency="${candidate.constituency}">
+            <td th:text="${candidate.name}">Mini USB</td>
+            <td th:text="${candidate.party}">456</td>
+            <td th:text="${candidate.constituency}">Due</td>
+            <td class="candidate-votes" th:data-candidate-id='${candidate.id}' th:text="${candidate.voteCount}">0</td>
+            <td class="primary" th:if="${candidate.winner}">Details</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  </header>
+  <script>
+    // script.js
+
+    // Add Candidate
+    document.getElementById("candidate-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const candidateName = e.target[0].value;
+      const partyAffiliation = e.target[1].value;
+      alert(`Candidate ${candidateName} from ${partyAffiliation} added.`);
+      e.target.reset();
+    });
+
+    // Send Notification
+    document.querySelector("#notifications button").addEventListener("click", function () {
+      const notificationText = document.querySelector("#notifications textarea").value;
+      alert(`Notification sent: ${notificationText}`);
+      document.querySelector("#notifications textarea").value = "";
+    });
+
+    // Display Results
+    function displayResults() {
+      const resultStats = document.getElementById("result-stats");
+      resultStats.innerHTML = "<p>Loading election results...</p>";
+      // Dynamically fetch and display results here.
+    }
+    displayResults();
+
+    // Live Monitoring
+    function startLiveMonitoring() {
+      const liveFeed = document.getElementById("live-feed");
+      liveFeed.innerHTML = "<p>Live monitoring active...</p>";
+      // Dynamically update live data
+    }
+    startLiveMonitoring();
+
+    // Candidate Verification
+    function loadVerificationList() {
+      const verificationList = document.getElementById("verification-list");
+      verificationList.innerHTML = "<p>Loading candidates for verification...</p>";
+      // Dynamically fetch candidate data
+    }
+    loadVerificationList();
+
+  </script>
+
+  <script>
+    function fetchVotingStatus() {
+      console.log("Fetching voting status...");  // Debugging log
+      $.ajax({
+        url: '/admin/voting-status',
+        method: 'GET',
+        success: function (data) {
+          console.log("Voting status received:", data);  // Debugging log
+          if (data.isVotingOpen) {
+            $('#voting-status').text('Voting is Open');
+            $('#vote-button').prop('disabled', false);  // Enable vote button
+          } else {
+            $('#voting-status').text('Voting is Closed');
+            $('#vote-button').prop('disabled', true);  // Disable vote button
+          }
+        },
+        error: function (err) {
+          console.error('Error fetching voting status:', err);
+        }
+      });
+    }
+
+    // Poll every 5 seconds
+    setInterval(fetchVotingStatus, 5000);
+
+    // Fetch initial status when page loads
+    fetchVotingStatus();
+
+  </script>
+  
+  <script>
+    // Filter function for constituency
+    function filterByConstituency() {
+      const selectedConstituency = document.getElementById('constituency-filter').value;
+      const candidateRows = document.querySelectorAll('.candidate-item');
+      
+      candidateRows.forEach(row => {
+        const constituency = row.getAttribute('data-constituency');
+        if (!selectedConstituency || constituency === selectedConstituency) {
+          row.style.display = ''; // Show if matches or "All" is selected
+        } else {
+          row.style.display = 'none'; // Hide if it doesn't match
+        }
+      });
+    }
+  
+    // Function to fetch live vote counts and update the displayed values
+    function fetchLiveVoteCounts() {
+      const selectedConstituency = document.getElementById('constituency-filter').value; // Get selected constituency
+  
+      fetch('/vote/api/live-vote-counts')  // API endpoint that returns live vote counts
+        .then(response => response.json())  // Parse the JSON response
+        .then(data => {
+          // Loop through the data and update the vote count for each candidate
+          data.forEach(candidate => {
+            console.log(candidate)
+            // Only update candidates from the selected constituency
+            if (!selectedConstituency || candidate.constituency === selectedConstituency) {
+              const voteCell = document.querySelector(`.candidate-votes[data-candidate-id='${candidate.id}']`);
+              if (voteCell) {
+                voteCell.textContent = candidate.voteCount;
+              }
+            }
+          });
+        })
+        .catch(error => console.error('Error fetching live vote counts:', error));
+    }
+  
+    // Refresh live vote counts every 5 seconds
+    setInterval(fetchLiveVoteCounts, 5000);
+  
+    // Fetch initial live vote counts when the page loads
+    fetchLiveVoteCounts();
+  </script>
+</body>
+
+</html>

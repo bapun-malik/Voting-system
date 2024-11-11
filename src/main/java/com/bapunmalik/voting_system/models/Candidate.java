@@ -6,8 +6,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "candidates")
 public class Candidate {
 
@@ -21,36 +27,14 @@ public class Candidate {
     @Column(nullable = false)
     private String party;
 
-    // Constructors, Getters, and Setters
-    public Candidate() {
-    }
+    @Column
+    private String constituency;
 
-    public Candidate(String name, String party) {
-        this.name = name;
-        this.party = party;
-    }
+    @Column(nullable = false)
+    private String symbol;
 
-    public Long getId() {
-        return id;
-    }
+    private boolean winner=false;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String photoFilename;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getParty() {
-        return party;
-    }
-
-    public void setParty(String party) {
-        this.party = party;
-    }
 }

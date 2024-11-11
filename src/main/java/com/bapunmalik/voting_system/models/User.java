@@ -43,7 +43,10 @@ public class User {
     @Column(unique=true)
     private Long aadhar;
     @Column(nullable = false)
-    private boolean approved;
+    private boolean approved=false;
+
+    private boolean voted=false;
+    private String role;
     // Getters and Setters
 
     private String photoFileName; // Add this

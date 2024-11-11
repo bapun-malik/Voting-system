@@ -1,31 +1,23 @@
 package com.bapunmalik.voting_system.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bapunmalik.voting_system.configs.ByteArrayMultipartFile;
-import com.bapunmalik.voting_system.models.TempUser;
 import com.bapunmalik.voting_system.models.User;
 import com.bapunmalik.voting_system.service.OtpService;
 import com.bapunmalik.voting_system.service.UserService;
 import com.bapunmalik.voting_system.service.VoterIdGeneratorService;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -40,6 +32,10 @@ public class UserController {
 
     @Autowired
     private OtpService otpService;
+
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Value("${project.poster}")
     private String path;
@@ -69,114 +65,6 @@ public class UserController {
         return "OTP sent to your email.";
     }
 
-    // @PostMapping("/verify-otp")
-    // @ResponseBody
-    // public ResponseEntity<Map<String, Object>> verifyOtp(@RequestBody Map<String,
-    // String> requestBody) {
-    // String otp = requestBody.get("otp");
-    // String email = requestBody.get("email");
-
-    // Map<String, Object> response = new HashMap<>();
-
-    // System.out.println("\n\nemail is :"+email+"\n OTP :"+otp);
-    // if (otpService.validateOtp(email,otp)) {
-
-    // User user = userService.getTempUser();
-    // byte[] photoBytes = userService.getTempPhotoBytes();
-    // byte[] signatureBytes = userService.getTempSignatureBytes();
-
-    // if (user != null && photoBytes != null && signatureBytes != null) {
-    // try {
-    // // Save files
-    // String voterId = voterIdGeneratorService.generateVoterId(user.getState());
-    // user.setVoterId(voterId);
-
-    // // Create the uploads directory if it doesn't exist
-    // Path uploadPath = Paths.get(path);
-    // if (!Files.exists(uploadPath)) {
-    // Files.createDirectories(uploadPath);
-    // }
-
-    // MultipartFile photoFile = convertToMultipartFile(photoBytes, "photo.jpg");
-    // MultipartFile signatureFile = convertToMultipartFile(signatureBytes,
-    // "signature.jpg");
-    // String photoFileName = saveFile(photoFile, user.getAadhar() + "_photo");
-    // String signatureFileName = saveFile(signatureFile, user.getAadhar() +
-    // "_signature");
-    // // Save photo and signature
-
-    // user.setPhotoFileName(photoFileName);
-    // user.setSignatureFileName(signatureFileName);
-    // user.setApproved(false);
-
-    // // Save user to the database
-    // userService.saveUser(user);
-    // userService.clearTempUser();
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // response.put("success", false);
-    // return ResponseEntity.ok(response);
-    // }
-
-    // response.put("success", true);
-    // }
-    // } else {
-    // response.put("success", false);
-    // response.put("message", "Invalid OTP.");
-    // }
-
-    // return ResponseEntity.ok(response);
-    // }
-
-    // @PostMapping("/register")
-    // public String handleRegistration(@ModelAttribute User user,
-    // @RequestParam("photo") MultipartFile photo,
-    // @RequestParam("signature") MultipartFile signature,
-    // @RequestParam(value = "otp", required = false) String Uotp,
-    // HttpSession session,
-    // Model model) {
-    // if (otpService.validateOtp(Uotp,(String)session.getAttribute("otp"))) {
-    // model.addAttribute("message", "OTP verified successfully!");
-    // // Handle file upload and user registration logic here
-    // if (user.getAadhar() == null ||
-    // !user.getAadhar().toString().matches("\\d{12}")) {
-    // model.addAttribute("error", "Invalid Aadhaar number.");
-    // return "signup";
-    // }
-
-    // try {
-
-    // String voterId = voterIdGeneratorService.generateVoterId(user.getState());
-    // user.setVoterId(voterId);
-    // // Create the uploads directory if it doesn't exist
-    // Path uploadPath = Paths.get(path);
-    // if (!Files.exists(uploadPath)) {
-    // Files.createDirectories(uploadPath);
-    // }
-
-    // // Process and save the photo
-    // String photoFileName = saveFile(photo, user.getAadhar() + "_photo");
-    // String signatureFileName = saveFile(signature, user.getAadhar() +
-    // "_signature");
-    // user.setPhotoFileName(photoFileName);
-    // user.setSignatureFileName(signatureFileName);
-    // user.setApproved(false); // Default to false or as needed
-
-    // // Update user entity with file names
-
-    // // Save the user
-    // userService.saveUser(user);
-
-    // model.addAttribute("voterId", voterId);
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // model.addAttribute("error", "Failed to upload files.");
-    // return "signup";
-    // }
-    // }
-    // return "success";
-    // }
-
     @PostMapping("/register")
     public String handleRegistration(@ModelAttribute User user,
             @RequestParam("photo") MultipartFile photo,
@@ -190,7 +78,8 @@ public class UserController {
         try {
             String voterId = voterIdGeneratorService.generateVoterId(user.getState());
             user.setVoterId(voterId);
-
+            user.setRole("USER");
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             Path uploadPath = Paths.get(path);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);

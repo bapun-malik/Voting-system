@@ -1,33 +1,403 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* styles.css */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f4f6f9;
+    }
+
+    .dashboard {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #1f2937;
+      color: #ffffff;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar nav ul {
+      list-style: none;
+    }
+
+    .sidebar nav ul li {
+      margin: 15px 0;
+    }
+
+    .sidebar nav ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    section h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    form input,
+    textarea,
+    button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+    .form-container {
+      background-color: white;
+      padding: 3rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+    }
+    #candidate-form {
+      width: 50%;
+      position: relative;
+      left: 25%;
+    }
+    .form-group {
+      margin-bottom: 2rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    input,
+    input[type="file"] {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    input[type="file"] {
+      padding: 0.5rem;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+    body {
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+}
+
+.close-button:hover {
+  color: #000;
+}
+ /* Custom Properties */
+ :root {
+            --primary-color: #2a6f9d;
+            --secondary-color: #264653;
+            --accent-color: #e9c46a;
+            --text-color: #2b2d42;
+            --bg-color: #f8f9fa;
+        }
+
+        /* Smooth Scroll Behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            top: -50%;
+            left: -50%;
+            animation: shine 8s infinite linear;
+        }
+
+        .header-content {
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-color);
+        }
+         /* Animations */
+         @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shine {
+            to {
+                transform: rotate(45deg) translate(50%, 50%);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header p {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+  </style>
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
+  <div class="dashboard">
+    <aside class="sidebar">
+      <h2><a th:href="@{/admin/dashboard}" style="text-decoration: none;color: white;">Admin Panel</a></h2>
+    <nav>
+      <ul>
+        <li><a th:href="@{/admin/candidate-registration}">Add Candidate</a></li>
+        <li><a th:href="@{/notifications}">Notifications</a></li>
+        <li><a th:href="@{/admin/publish-result}">Results</a></li>
+        <li><a th:href="@{/admin/live-monitoring}">Live Monitoring</a></li>
+        <li><a th:href="@{/admin/voter-verification}">Voter Verification</a></li>
+        <li><a th:href="@{/logout}">Logout</a></li>
 
-    <div class="dashboard-section">
-        <h2>Overview</h2>
-        <p>Total Number of Voters: <span th:text="${totalVoters}"></span></p>
-        <p>Total Number of Candidates: <span th:text="${totalCandidates}"></span></p>
-        <p>Pending Voter Approvals: <span th:text="${pendingVoters}"></span></p>
-        <p>Pending Complaints: <span th:text="${pendingComplaints}"></span></p>
+      </ul>
+  </nav>
+  </aside>
+  </div>
+  <header class="header" style="width: 100%;">
+    <div class="header-content">
+        <h1>E-Voting System</h1>
+        <p>A Minor Project by Bapun Malik</p>
     </div>
+</header>
+  <script src="script.js"></script>
+  <script>
+    // script.js
 
-    <div class="dashboard-section">
-        <h2>Manage Candidates</h2>
-        <a href="/admin/candidates" class="btn">View/Edit Candidates</a>
-    </div>
+// Add Candidate
+document.getElementById("candidate-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const candidateName = e.target[0].value;
+  const partyAffiliation = e.target[1].value;
+  alert(`Candidate ${candidateName} from ${partyAffiliation} added.`);
+  e.target.reset();
+});
 
-    <div class="dashboard-section">
-        <h2>Voter Approval</h2>
-        <a href="/admin/voters" class="btn">Approve/Reject Voters</a>
-    </div>
+// Send Notification
+document.querySelector("#notifications button").addEventListener("click", function () {
+  const notificationText = document.querySelector("#notifications textarea").value;
+  alert(`Notification sent: ${notificationText}`);
+  document.querySelector("#notifications textarea").value = "";
+});
 
-    <div class="dashboard-section">
-        <h2>Complaint Resolution</h2>
-        <a href="/admin/complaints" class="btn">Resolve Complaints</a>
-    </div>
+// Display Results
+function displayResults() {
+  const resultStats = document.getElementById("result-stats");
+  resultStats.innerHTML = "<p>Loading election results...</p>";
+  // Dynamically fetch and display results here.
+}
+displayResults();
+
+// Live Monitoring
+function startLiveMonitoring() {
+  const liveFeed = document.getElementById("live-feed");
+  liveFeed.innerHTML = "<p>Live monitoring active...</p>";
+  // Dynamically update live data
+}
+startLiveMonitoring();
+
+// Candidate Verification
+function loadVerificationList() {
+  const verificationList = document.getElementById("verification-list");
+  verificationList.innerHTML = "<p>Loading candidates for verification...</p>";
+  // Dynamically fetch candidate data
+}
+loadVerificationList();
+
+  </script>
 </body>
 </html>

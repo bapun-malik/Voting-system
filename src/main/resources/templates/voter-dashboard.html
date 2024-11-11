@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Webpage</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+    <div class="container">
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <h2>Insta <span class="primary">Vote</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-symbols-outlined"> close </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="#" class="active">
+                    <span class="material-symbols-outlined" > grid_view </span>
+                    <h3>Dashboard</h3>
+                </a>
+
+               <a th:href="@{/vote}" >
+                    <span class="material-symbols-outlined"> person_outline </span>
+                    <h3>Vote</h3>
+                </a>
+               <a th:href="@{/pdf/generate(id=${user.voterId})}" >
+                    <span class="material-symbols-outlined"> download </span>
+                    <h3>VoterId</h3>
+                </a>
+
+                
+
+                <a th:href="@{/logout}">
+                    <span class="material-symbols-outlined"> logout </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+
+        <main>
+            <h1>Dashboard</h1>
+
+
+            <div class="insights">
+                <div class="sales" th:each="candidate : ${candidates}" th:if="${candidate.constituency == user.district}">
+                    <img th:src="@{/images/{photo}.png(photo=${candidate.symbol})}" alt="Candidate Symbol" style="width: 3rem;">
+                    <div class="middle">
+                        <div class="left">
+                            <h3 th:text="${candidate.party}"></h3>
+                            <h1 th:text="${candidate.name}">$25,023</h1>
+                        </div>
+                        <img th:src="@{/{photo}(photo=${candidate.photoFilename})}" alt="Candidate image" style="width: 5rem;">                              
+                    </div>
+                    <h2 th:if="${!status}" th:text="${candidate.winner ? 'Winner' : ''}" style="text-align: center; color: rgb(27, 48, 238);"></h2>
+                </div>
+                
+            </div> 
+
+            <div class="recent-order">
+                <h1 th:text="${status ? 'Current Voting' : 'Voting Not Started Yet'}"></h1>
+                    <table th:if="${status}">
+                        <thead>
+                            <tr>
+                                <th>Candidate Name</th>
+                                <th>Party</th>
+                                <th>Constituency</th>
+                                <th>Number of Votes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr th:each="candidate : ${candidates}" th:if="${candidate.constituency=='Nota' or candidate.constituency == user.district}">
+                                <td th:text="${candidate.name}">Mini USB</td>
+                                <td th:text="${candidate.party}">456</td>
+                                <td th:text="${candidate.constituency}">Due</td>
+                                <td class="candidate-votes" th:data-candidate-id='${candidate.id}' th:text="${candidate.voteCount}">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+
+        </main>
+
+        <div class="right">
+            <div class="top">
+                    <button id="menu-bar">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                
+                <div class="theme-toggler">
+                    <span class="material-symbols-outlined active">light_mode</span>
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </div>
+
+                <div class="profile">
+                    <div class="info">
+                        <p th:text="${user.firstName}"></p>
+                        <p th:text="${user.lastName}"></p>
+                        <small class="text-muted"></small>
+                    </div>
+
+                    <div class="profile-photo">
+                        <img th:src="@{/{photo}(photo=${user.photoFileName})}" alt="image">
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-updates">
+                <h2>Recent Updates</h2>
+
+                <div class="updates" >
+
+                    <div class="update" th:each="notification : ${notifications}">
+                            <p th:text="${notification.title}" style="font-size: 1rem; font-weight: 800;"></p><br>
+                       
+                            <p th:text="${notification.message}"></p>
+                    </div>
+                
+                </div>
+            </div>
+
+            <div class="sales-analytics" th:if="${status}">
+                <h2>Vote Analytics</h2>
+                <div class="item onlion">
+                    <div class="right-text">
+                        <div class="info">
+                            <h3>Total Voter</h3>
+                        </div>
+                        <h3 th:text="${totalVoter}">3849</h3>
+                        <div class="info">
+                            <h3>Total Votes</h3>
+                            <small class="text-muted">Last updated <span id="last-updated-time">just now</span></small>
+                        </div>
+                        <h3 id="total-vote-count">3849</h3>
+                        <!-- <h5 class="danger">-17%</h5> -->
+                    </div>
+                </div>
+                <div class="item onlion" th:each="candidate : ${candidates}" th:if="${candidate.constituency == user.district}">
+                    <div>
+                        <img th:src="@{/images/{photo}.png(photo=${candidate.symbol})}" alt="Candidate Symbol" style="width: 5rem;">
+                    </div>
+
+                    <div class="right-text">
+                        <div class="info">
+                            <h3>Total Votes</h3>
+                        </div>
+                        <!-- <h5 class="danger">-17%</h5> -->
+                        <h3 class="candidate-votes" th:data-candidate-id='${candidate.id}' th:text="${candidate.voteCount}" style="text-align: center;">3849</h3>
+                    </div>
+                </div>
+                <div class="item onlion" th:each="candidate : ${candidates}" th:if="${candidate.constituency=='Nota'}">
+                    <div>
+                        <img th:src="@{/images/{photo}.png(photo=${candidate.symbol})}" alt="Candidate Symbol" style="width: 5rem;">
+                    </div>
+
+                    <div class="right-text">
+                        <div class="info">
+                            <h3>Total Votes</h3>
+                            <small class="text-muted">Last seen 2 Hours</small>
+                        </div>
+                        <!-- <h5 class="danger">-17%</h5> -->
+                        <h3 class="candidate-votes" th:data-candidate-id='${candidate.id}' th:text="${candidate.voteCount}">3849</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item add-products">
+                <div>
+                    <span class="material-symbols-outlined">add</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/dashboard.js}"></script>
+    <script>
+        function fetchLiveVoteCounts() {
+            fetch('/vote/api/live-vote-counts')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(candidate => {
+                        // Update the vote count for each candidate
+                        const voteCell = document.querySelector(`.candidate-votes[data-candidate-id='${candidate.id}']`);
+                        if (voteCell) {
+                            voteCell.textContent = candidate.voteCount;
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching live vote counts:', error));
+        }
+    
+        // Refresh every 5 seconds
+        setInterval(fetchLiveVoteCounts, 5000);
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        const constituency =`[[${user.district}]]`; // Change this to the relevant constituency
+    
+        function fetchTotalVoteCount() {
+            $.ajax({
+                url: `/vote/total/${constituency}`,
+                method: 'GET',
+                success: function(data) {
+                    console.log(data)
+                    // Update the vote count and last updated time
+                    $('#total-vote-count').text(data);
+                    
+                    // Update the "Last updated" time
+                    const now = new Date();
+                    const hours = now.getHours().toString().padStart(2, '0');
+                    const minutes = now.getMinutes().toString().padStart(2, '0');
+                    $('#last-updated-time').text(`at ${hours}:${minutes}`);
+                },
+                error: function(err) {
+                    console.error('Error fetching vote count:', err);
+                }
+            });
+        }
+    
+        // Fetch live vote count every 5 seconds
+        setInterval(fetchTotalVoteCount, 5000);
+    
+        // Initial fetch when the page loads
+        fetchTotalVoteCount();
+    </script>
+</body>
+</html>

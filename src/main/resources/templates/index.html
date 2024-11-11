@@ -1,46 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" 
+xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aesthetic Landing</title>
     <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="stylesheet" th:href="@{css/styles.css}">
 </head>
 <body>
     <div th:replace="fragments/header::header"></div>
     <section class="hero" id="home">
         <div class="floating-shapes" id="shapes"></div>
         <div class="hero-content">
-            <h1>Create Something Beautiful Today</h1>
-            <p>Transform your ideas into reality with our powerful and intuitive platform. Start your journey towards innovation and creativity.</p>
-            <a href="#" class="cta-button">Get Started</a>
+            <h1>Make Your Voice Heard Today</h1>
+            <p>Cast your vote securely and easily with our trusted online voting platform. Empower yourself and be part of the democratic process from anywhere, at any time.</p>
+            <a th:href="@{/users/signup}" class="cta-button" th:if="${#authentication.principal == 'anonymousUser'}">Vote Now</a>
+            <a th:href="@{/dashboard}" class="cta-button" th:if="${#authentication.principal != 'anonymousUser'}">Vote Now</a>
         </div>
     </section>
 
     <section class="features" id="features">
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">✨</div>
-                <h3>Beautiful Design</h3>
-                <p>Create stunning visuals with our intuitive design tools.</p>
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Voting</h3>
+                <p>Your vote is encrypted and stored securely to ensure privacy and integrity.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🚀</div>
-                <h3>Fast Performance</h3>
-                <p>Lightning-fast performance that keeps up with your creativity.</p>
+                <div class="feature-icon">⚡</div>
+                <h3>Fast Results</h3>
+                <p>Real-time voting and instant results for transparency and trust.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🎯</div>
-                <h3>Easy to Use</h3>
-                <p>Simple and intuitive interface for the best user experience.</p>
+                <div class="feature-icon">💻</div>
+                <h3>Accessible Anywhere</h3>
+                <p>Vote from any device, at any time, with our easy-to-use platform.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🛠️</div>
-                <h3>Powerful Tools</h3>
-                <p>Advanced features to bring your vision to life.</p>
+                <div class="feature-icon">🔍</div>
+                <h3>Transparent Process</h3>
+                <p>Track results and audit votes with a fully transparent system.</p>
             </div>
         </div>
     </section>
+    
 
     <script>
         // Create floating shapes
@@ -100,34 +105,11 @@
               document.body.style.overflow = 'auto';
           }
       }
-
-      // Handle form submissions
-      function handleLogin(event) {
-          event.preventDefault();
-          const email = document.getElementById('login-email').value;
-          const password = document.getElementById('login-password').value;
-          
-          // Add your login logic here
-          console.log('Login:', { email, password });
-          
-          // Close modal after submission
-          closeModal('login-modal');
-      }
-
-      function handleSignup(event) {
-          event.preventDefault();
-          const name = document.getElementById('signup-name').value;
-          const email = document.getElementById('signup-email').value;
-          const password = document.getElementById('signup-password').value;
-          
-          // Add your signup logic here
-          console.log('Signup:', { name, email, password });
-          
-          // Close modal after submission
-          closeModal('signup-modal');
-      }
-
       // Rest of your existing JavaScript...
+      function toggleMenu() {
+    const navLinks = document.getElementById('nav-links');
+    navLinks.classList.toggle('active');
+}
   </script>
 </body>
 </html>
